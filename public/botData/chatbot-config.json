@@ -1,0 +1,16 @@
+{
+    "primaryColor": "#FF5F19",
+    "chatbotName": "Chatbot Fametro",
+    "buttonColor": "#E55616",
+    "backgroundColor": "#D9E0E5",
+    "headerColor": "#1B5CB5",
+    "userBubble": "#FF5F19",
+    "botBubble": "#FF1111",
+    "userText": "#fff",
+    "botText": "#fff",
+    "iconUrl": "./botData/avatar.webp",
+    "botAvatar": "./botData/avatar.webp",
+    "welcomeBubble": "Olá! Bem-vindo(a) à Fametro!",
+    "firstBotMessage": "Eu sou o Fame, seu assistente virtual. Como posso te ajudar a transformar seu futuro com a gente?",
+    "typingDelay": 0.5
+}
