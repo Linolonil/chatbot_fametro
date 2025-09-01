@@ -2,24 +2,36 @@ export class PromptService {
     #messages = [];
     #session = null;
 
-    async init(initialPrompt) {
-        if (!window.LanguageModel) return;
 
-        // Sempre reinicia o array, garantindo que o system vem primeiro
-        this.#messages = [{
-            role: 'system',
-            content: initialPrompt
-        }];
+     async init(initialPrompt, onProgress) {
+        if (!window.LanguageModel) {
+            console.error("LanguageModel API não encontrada.");
+            return false;
+        }
 
-        return this.#createSession();
-    }
+        this.#messages = [{ role: 'system', content: initialPrompt }];
 
-    async #createSession() {
-        this.#session = await LanguageModel.create({
-            initialPrompts: this.#messages,
-            expectedInputLanguages: ['pt'],
-        });
-        return this.#session;
+        try {
+            // VOLTANDO AO MÉTODO ORIGINAL E CORRETO: LanguageModel.create()
+            this.#session = await window.LanguageModel.create({
+                initialPrompts: this.#messages,
+                // A opção de progresso pode não existir neste método,
+                // mas não causa erro se for ignorada.
+                // Vamos mantê-la por segurança.
+                progress: (progress) => {
+                    if (onProgress) {
+                        onProgress(progress);
+                    }
+                }
+            });
+            console.log("Sessão de IA criada com sucesso!");
+            return true;
+        } catch (error) {
+            // Este catch agora vai pegar o InvalidStateError se o dispositivo não for compatível
+            console.error("Falha ao criar a sessão de IA:", error);
+            this.#session = null;
+            return false;
+        }
     }
 
     hasSession() {

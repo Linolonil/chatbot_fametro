@@ -13,6 +13,11 @@ export class ChatbotView {
     #chatWin = document.querySelector("#ewcb-chat-window");
     #floatingIcon = document.querySelector("#ewcb-icon");
     #floatingIconBadge = document.querySelector(".ewcb-btn-badge");
+    #initialStateContainer = document.querySelector("#ewcb-initial-state");
+    #initAiBtn = document.querySelector("#ewcb-init-ai-btn");
+    #progressContainer = document.querySelector("#ewcb-progress-container");
+    #progressBar = document.querySelector("#ewcb-progress-bar");
+    #progressLabel = document.querySelector("#ewcb-progress-label");
     #welcomeBubble = null;
 
     constructor(config) {
@@ -23,10 +28,11 @@ export class ChatbotView {
         this.setTypingDotDuration();
     }
 
-    setupEventHandlers({ onOpen, onSend, onStop }) {
+setupEventHandlers({ onOpen, onSend, onStop, onInitAI }) {
         this.#openBtn.onclick = () => { this.openChat(); onOpen(); };
         this.#stopBtn.onclick = () => { onStop(); };
         this.#closeBtn.onclick = () => { this.closeChat(); };
+        this.#initAiBtn.onclick = () => { onInitAI(); };
         this.#form.onsubmit = (e) => {
             e.preventDefault();
             const val = this.#input.value.trim();
@@ -35,6 +41,32 @@ export class ChatbotView {
             this.clearInput();
             onSend(val);
         };
+    }
+
+     // Novo método para mostrar o estado de download
+    showDownloadState() {
+        this.#initialStateContainer.style.display = 'block';
+        this.#initAiBtn.style.display = 'block';
+        this.#progressContainer.style.display = 'none';
+        this.setInputEnabled(false); // Garante que o input de texto esteja desabilitado
+    }
+
+    // Novo método para mostrar o progresso
+    showProgress() {
+        this.#initAiBtn.style.display = 'none';
+        this.#progressContainer.style.display = 'block';
+    }
+
+    // Novo método para atualizar a barra de progresso
+    updateProgress(progress) {
+        const percent = Math.round(progress.progress * 100);
+        this.#progressBar.value = percent;
+        this.#progressLabel.textContent = `Baixando modelo... ${percent}%`;
+    }
+
+    // Novo método para esconder tudo e mostrar o chat normal
+    hideInitialState() {
+        this.#initialStateContainer.style.display = 'none';
     }
 
     setInputEnabled(enabled) {
@@ -76,6 +108,8 @@ export class ChatbotView {
     }
 
     appendBotMessage(text, element = null, renderMarkdown = true) {
+        this.hideInitialState();
+
         const el = element || this.#createBotMessage();
         el.innerHTML = this.#renderBotMessageHTML(text, renderMarkdown);
         this.#append(el);

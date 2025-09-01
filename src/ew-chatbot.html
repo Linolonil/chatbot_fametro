@@ -13,6 +13,15 @@
             <button class="ewcb-close-btn" id="ewcb-close-btn" aria-label="Close chat">&times;</button>
         </div>
         <div class="ewcb-chat-body" id="ewcb-messages">
+            <div id="ewcb-initial-state" class="ewcb-initial-state">
+                <p>Para começar, prepare o assistente virtual. Isso fará o download do modelo de IA necessário para o
+                    seu dispositivo.</p>
+                <button id="ewcb-init-ai-btn" class="ewcb-btn">Preparar Assistente</button>
+                <div id="ewcb-progress-container" style="display: none;">
+                    <p id="ewcb-progress-label">Baixando modelo...</p>
+                    <progress id="ewcb-progress-bar" value="0" max="100"></progress>
+                </div>
+            </div>
         </div>
         <form class="ewcb-chat-footer" id="ewcb-form" autocomplete="off">
             <input type="text" id="ewcb-input" placeholder="Digite sua mensagem..." autocomplete="off" />
